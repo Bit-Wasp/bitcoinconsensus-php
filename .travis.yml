@@ -1,0 +1,31 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+
+install:
+    - |
+        wget https://bitcoin.org/bin/bitcoin-core-0.10.2/bitcoin-0.10.2-linux32.tar.gz \
+        && tar xvf bitcoin-0.10.2-linux32.tar.gz \
+        && cd bitcoin-0.10.2 \
+        && sudo cp include/bitcoinconsensus.h /usr/include/ \
+        && sudo cp lib/libbitcoinconsensus.so.0.0.0 /usr/lib/ \
+        && sudo ln /usr/lib/libbitcoinconsensus.so.0.0.0 -s /usr/lib/libbitcoinconsensus.so.0 \
+        && sudo ln /usr/lib/libbitcoinconsensus.so.0.0.0 -s /usr/lib/libbitcoinconsensus.so \
+        && cd ..
+    - |
+        cd bitcoinconsensus \
+        && phpize && ./configure && make && sudo make install \
+        && cd ..
+    - composer update
+
+before_script:
+    - php-config || true
+    - phpenv rehash
+    - phpenv version-name
+
+script:
+    - php -dextension=bitcoinconsensus.so vendor/phpunit/phpunit/phpunit --debug tests/
