@@ -8,8 +8,8 @@ php:
 
 install:
     - |
-        wget https://bitcoin.org/bin/bitcoin-core-0.10.2/bitcoin-0.10.2-linux32.tar.gz \
-        && tar xvf bitcoin-0.10.2-linux32.tar.gz \
+        wget https://bitcoin.org/bin/bitcoin-core-0.10.2/bitcoin-0.10.2-linux64.tar.gz \
+        && tar xvf bitcoin-0.10.2-linux64.tar.gz \
         && cd bitcoin-0.10.2 \
         && sudo cp include/bitcoinconsensus.h /usr/include/ \
         && sudo cp lib/libbitcoinconsensus.so.0.0.0 /usr/lib/ \
