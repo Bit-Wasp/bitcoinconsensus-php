@@ -22,7 +22,7 @@ install:
         cd bitcoinconsensus \
         && phpize && ./configure && make && sudo make install \
         && cd ..
-    - git clone git@github.com:jonasnick/bitcoinconsensus_tests
+    - git clone https://github.com/jonasnick/bitcoinconsensus_testcases.git
     - composer update
 
 before_script:
