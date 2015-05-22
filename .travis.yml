@@ -17,9 +17,7 @@ install:
         && sudo ln /usr/lib/libbitcoinconsensus.so.0.0.0 -s /usr/lib/libbitcoinconsensus.so \
         && cd ..
     - |
-        ls \
-        && cd bitcoinconsensus \
-        && ls \
+        cd bitcoinconsensus \
         && phpize && ./configure && make && sudo make install \
         && cd ..
     - composer update
