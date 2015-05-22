@@ -15,6 +15,7 @@ install:
         && sudo cp lib/libbitcoinconsensus.so.0.0.0 /usr/lib/ \
         && sudo ln /usr/lib/libbitcoinconsensus.so.0.0.0 -s /usr/lib/libbitcoinconsensus.so.0 \
         && sudo ln /usr/lib/libbitcoinconsensus.so.0.0.0 -s /usr/lib/libbitcoinconsensus.so \
+        && sudo ls -lsah /usr/lib/libbitcoin* \
         && sudo ldconfig \
         && cd ..
     - |
