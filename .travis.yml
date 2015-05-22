@@ -30,4 +30,4 @@ before_script:
     - phpenv version-name
 
 script:
-    - php -dextension=bitcoinconsensus.so vendor/phpunit/phpunit/phpunit --debug tests/
+    - php -dextension=bitcoinconsensus.so vendor/bin/phpunit --debug tests/
