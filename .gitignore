@@ -1,4 +1,3 @@
-kkk
 .idea
 nbproject
 composer.lock
@@ -10,7 +9,6 @@ modules
 missing
 *.lo
 *.la
-config.*
 .deps
 .gdbinit
 .gdbinit.default
