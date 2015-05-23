@@ -32,13 +32,14 @@ PHP_FUNCTION(bitcoinconsensus_verify_script)
     unsigned char *scriptPubKey, *transaction;
     int scriptPubKeyLen, transactionLen;
     unsigned int nInput, flags;
-    zval scriptErr;
-    bitcoinconsensus_error *error;
+    zval *scriptErr;
+    bitcoinconsensus_error error;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssllz", &scriptPubKey, &scriptPubKeyLen, &transaction, &transactionLen, &nInput, &flags, &scriptErr) == FAILURE) {
         return;
     }
 
-    int result = bitcoinconsensus_verify_script(scriptPubKey, scriptPubKeyLen, transaction, transactionLen, nInput, flags, error);
+    int result = bitcoinconsensus_verify_script(scriptPubKey, scriptPubKeyLen, transaction, transactionLen, nInput, flags, &error);
+    ZVAL_LONG(scriptErr, error);
     RETURN_LONG(result);
 }
 /* }}} */
