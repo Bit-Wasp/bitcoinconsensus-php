@@ -1,3 +1,4 @@
+bitcoinconsensus_testcases
 .idea
 nbproject
 composer.lock
@@ -29,6 +30,4 @@ mkinstalldirs
 run-tests.php
 tags
 vendor
-
-
-
+CMakeLists.txt
