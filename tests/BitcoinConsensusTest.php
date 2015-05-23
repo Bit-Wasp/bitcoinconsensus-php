@@ -10,7 +10,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         $basedir = __DIR__ . '/../bitcoinconsensus_testcases/';
         $fulldir = $basedir . $dir . '/';
         foreach (scandir($fulldir) as $file) {
-            if (in_array($file, ['.','..'])) {
+            if (in_array($file, array('.','..'))) {
                 continue;
             }
             $results[] = $fulldir . $file;
@@ -21,8 +21,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
     private function loadVectors($dir) {
         $vectors = [];
         foreach ($this->loadExternalTestFiles($dir) as $c => $file) {
-            $v = array_merge([$dir, $c], explode("\n", file_get_contents($file)));
-            $vectors[] = $v;
+            $vectors[] = array_merge(array($dir, $c), explode("\n", file_get_contents($file)));
         }
         return $vectors;
     }
