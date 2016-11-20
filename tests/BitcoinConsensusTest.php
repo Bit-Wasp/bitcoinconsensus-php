@@ -4,60 +4,51 @@ namespace BitWasp\BitcoinConsensus\Tests;
 
 class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
 {
-    private function loadExternalTestFiles($dir)
+
+    public function testVersion()
     {
+        $this->assertEquals(1, bitcoinconsensus_version());
+    }
+
+    public function getBitcoinScriptTests()
+    {
+        $vectors = json_decode(file_get_contents(__DIR__ . '/data.json') , true);
         $results = array();
-        $basedir = __DIR__ . '/../bitcoinconsensus_testcases/';
-        $fulldir = $basedir . $dir . '/';
-        foreach (scandir($fulldir) as $file) {
-            if (in_array($file, array('.','..'))) {
-                continue;
-            }
-            $results[] = $fulldir . $file;
+        foreach ($vectors as $vector) {
+            $results[] = array(
+                $vector['scriptPubKey'], $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result']
+            );
         }
         return $results;
     }
 
-    private function loadVectors($dir) {
-        $vectors = array();
-        foreach ($this->loadExternalTestFiles($dir) as $c => $file) {
-            $vectors[] = array_merge(array($dir, $c), explode("\n", file_get_contents($file)));
-        }
-        return $vectors;
-    }
-
-    public function getNegativeTests()
-    {
-        return $this->loadVectors('0.10-negative');
-    }
-
-    public function getPositiveTests()
-    {
-        return $this->loadVectors('0.10-positive');
-    }
-
-    public function getAllTests()
-    {
-        return array_merge($this->getPositiveTests(), $this->getNegativeTests());
-    }
-    public function testVersion()
-    {
-        $this->assertEquals(0, bitcoinconsensus_version());
-    }
-
     /**
-     * @dataProvider getAllTests
+     * @param bool $eResult
+     * @param string $scriptHex
+     * @param string $txHex
+     * @param int $nInput
+     * @param int $flags
+     * @dataProvider getBitcoinScriptTests
      */
-    public function testValid($dir, $c, $scriptHex, $txHex, $nInput, $flags, $eResult)
+    public function testValidOk($scriptHex, $amount, $txHex, $nInput, $flags, $eResult)
     {
         $script = pack("H*", $scriptHex);
         $tx = pack("H*", $txHex);
 
         $error = 0;
-        $result = bitcoinconsensus_verify_script($script, $tx, $nInput, $flags, $error);
-        $this->assertEquals($eResult, $result, $dir . "/" . $c);
 
-        // since the script returns true, the error can never be zero.
+        if ($flags & BITCOINCONSENSUS_VERIFY_CLEANSTACK) {
+            $flags |= BITCOINCONSENSUS_VERIFY_P2SH;
+            $flags |= BITCOINCONSENSUS_VERIFY_WITNESS;
+        }
+
+        if ($flags & (BITCOINCONSENSUS_VERIFY_P2SH | BITCOINCONSENSUS_VERIFY_WITNESS)) {
+            $result = (bool)\bitcoinconsensus_verify_script_with_amount($script, $amount, $tx, $nInput, $flags, $error);
+        } else {
+            $result = (bool) \bitcoinconsensus_verify_script($script, $tx, $nInput, $flags, $error);
+        }
+
+        $this->assertEquals($eResult, $result);
         if ($eResult == 1) {
             $this->assertEquals(0, $error);
         }
