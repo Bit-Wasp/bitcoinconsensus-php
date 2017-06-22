@@ -18,16 +18,63 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
     }
 
+    public function testWitness()
+    {
+        $nullDummyBit = 1 << 11;
+        $expectFindInALL = false;
+        if (defined('BITCOINCONSENSUS_VERIFY_WITNESS')) {
+            $expectFindInALL = true;
+
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_WITNESS);
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_ALL & (BITCOINCONSENSUS_VERIFY_WITNESS));
+        }
+
+        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
+    }
+
+    public function testCSV()
+    {
+        $nullDummyBit = 1 << 10;
+        $expectFindInALL = false;
+        if (defined('BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY')) {
+            $expectFindInALL = true;
+
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY);
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_ALL & (BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY));
+        }
+
+        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
+    }
+
+    public function testCltv()
+    {
+        $nullDummyBit = 1 << 9;
+        $expectFindInALL = false;
+        if (defined('BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY')) {
+            $expectFindInALL = true;
+
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY);
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_ALL & (BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY));
+        }
+
+        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
+    }
+
     public function testFlagsAll()
     {
         $expectFlags =
             BITCOINCONSENSUS_VERIFY_NONE |
             BITCOINCONSENSUS_VERIFY_P2SH |
-            BITCOINCONSENSUS_VERIFY_DERSIG |
-            BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY |
-            BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY |
-            BITCOINCONSENSUS_VERIFY_WITNESS;
-
+            BITCOINCONSENSUS_VERIFY_DERSIG;
+        if (defined('BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY')) {
+            $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY;
+        }
+        if (defined('BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY')) {
+            $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY;
+        }
+        if (defined('BITCOINCONSENSUS_VERIFY_WITNESS')) {
+            $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_WITNESS;
+        }
         if (defined('BITCOINCONSENSUS_VERIFY_NULLDUMMY')) {
             $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_NULLDUMMY;
         }
@@ -99,8 +146,12 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
 
         $error = 0;
 
-        if ($flags & (BITCOINCONSENSUS_VERIFY_P2SH | BITCOINCONSENSUS_VERIFY_WITNESS)) {
-            $result = (bool)\bitcoinconsensus_verify_script_with_amount($script, $amount, $tx, $nInput, $flags, $error);
+        if (defined('BITCOINCONSENSUS_VERIFY_WITNESS')) {
+            if ($flags & (BITCOINCONSENSUS_VERIFY_P2SH | BITCOINCONSENSUS_VERIFY_WITNESS)) {
+                $result = (bool)\bitcoinconsensus_verify_script_with_amount($script, $amount, $tx, $nInput, $flags, $error);
+            } else {
+                $result = (bool) \bitcoinconsensus_verify_script($script, $tx, $nInput, $flags, $error);
+            }
         } else {
             $result = (bool) \bitcoinconsensus_verify_script($script, $tx, $nInput, $flags, $error);
         }
