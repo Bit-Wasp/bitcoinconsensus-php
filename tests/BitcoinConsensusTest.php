@@ -4,6 +4,36 @@ namespace BitWasp\BitcoinConsensus\Tests;
 
 class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
 {
+    public function testNullDummy()
+    {
+        $nullDummyBit = 1 << 4;
+        $expectFindInALL = false;
+        if (defined('BITCOINCONSENSUS_VERIFY_NULLDUMMY')) {
+            $expectFindInALL = true;
+
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_NULLDUMMY);
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_ALL & (BITCOINCONSENSUS_VERIFY_NULLDUMMY));
+        }
+
+        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
+    }
+
+    public function testFlagsAll()
+    {
+        $expectFlags =
+            BITCOINCONSENSUS_VERIFY_NONE |
+            BITCOINCONSENSUS_VERIFY_P2SH |
+            BITCOINCONSENSUS_VERIFY_DERSIG |
+            BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY |
+            BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY |
+            BITCOINCONSENSUS_VERIFY_WITNESS;
+
+        if (defined('BITCOINCONSENSUS_VERIFY_NULLDUMMY')) {
+            $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_NULLDUMMY;
+        }
+
+        $this->assertEquals($expectFlags, BITCOINCONSENSUS_VERIFY_ALL);
+    }
 
     public function testVersion()
     {
