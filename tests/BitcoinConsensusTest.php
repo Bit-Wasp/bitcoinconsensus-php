@@ -10,16 +10,48 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, bitcoinconsensus_version());
     }
 
+    public function getSignerScriptTests()
+    {
+        $vectors = json_decode(file_get_contents(__DIR__ . '/signer-fixtures.json') , true);
+        $results = array();
+        foreach ($vectors['valid'] as $vector) {
+            if (array_key_exists('whex', $vector) && $vector['whex'] != "") {
+                $tx = $vector['whex'];
+            } else {
+                $tx = $vector['hex'];
+            }
+
+            foreach ($vector['raw']['ins'] as $nIn => $input) {
+                $results[] = array(
+                    $input['scriptPubKey'], $input['value'], $tx, $nIn, BITCOINCONSENSUS_VERIFY_ALL, true, $vector
+                );
+            }
+        }
+
+        return $results;
+    }
+
     public function getBitcoinScriptTests()
     {
         $vectors = json_decode(file_get_contents(__DIR__ . '/data.json') , true);
         $results = array();
         foreach ($vectors as $vector) {
-            $results[] = array(
-                $vector['scriptPubKey'], $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result']
-            );
+            if ($vector['flags'] == ($vector['flags']&BITCOINCONSENSUS_VERIFY_ALL)) {
+                $results[] = array(
+                    $vector['scriptPubKey'], $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result'], $vector
+                );
+            }
         }
         return $results;
+    }
+
+    public function getScriptFixtures()
+    {
+        $vectors = array();
+        foreach (array('getSignerScriptTests', 'getBitcoinScriptTests') as $fxn) {
+            $vectors = array_merge($vectors, $this->{$fxn}());
+        }
+        return $vectors;
     }
 
     /**
@@ -28,19 +60,14 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
      * @param string $txHex
      * @param int $nInput
      * @param int $flags
-     * @dataProvider getBitcoinScriptTests
+     * @dataProvider getScriptFixtures
      */
-    public function testValidOk($scriptHex, $amount, $txHex, $nInput, $flags, $eResult)
+    public function testValidOk($scriptHex, $amount, $txHex, $nInput, $flags, $eResult, $d = array())
     {
         $script = pack("H*", $scriptHex);
         $tx = pack("H*", $txHex);
 
         $error = 0;
-
-        if ($flags & BITCOINCONSENSUS_VERIFY_CLEANSTACK) {
-            $flags |= BITCOINCONSENSUS_VERIFY_P2SH;
-            $flags |= BITCOINCONSENSUS_VERIFY_WITNESS;
-        }
 
         if ($flags & (BITCOINCONSENSUS_VERIFY_P2SH | BITCOINCONSENSUS_VERIFY_WITNESS)) {
             $result = (bool)\bitcoinconsensus_verify_script_with_amount($script, $amount, $tx, $nInput, $flags, $error);
@@ -52,5 +79,6 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         if ($eResult == 1) {
             $this->assertEquals(0, $error);
         }
+
     }
 }
