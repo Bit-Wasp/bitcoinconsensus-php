@@ -22,22 +22,21 @@ Version v2.0.0 can run on PHP versions 5.3 - 5.6, and PHP 7.0 - 7.1.
     BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY
     BITCOINCONSENSUS_VERIFY_WITNESS
     
-    Optional:
+    Optional (depends on bitcoinconsensus.h build):
     BITCOINCONSENSUS_VERIFY_NULLDUMMY
 
 ## Compatibility
 
 v2.0.0 brings the library in line with the expectations upstream. It only
-exposes a minimal set of network activated script validation flags in [bitcoinconsensus.h](https://github.com/bitcoin/bitcoin/blob/master/src/script/bitcoinconsensus.h).
+exposes a minimal set of network activated script validation flags in 
+[bitcoinconsensus.h](https://github.com/bitcoin/bitcoin/blob/master/src/script/bitcoinconsensus.h).
 
-The BITCOINCONSENSUS_VERIFY_* constants have been removed in favor
-of BITCOINCONSENSUS_VERIFY_*. 
+The BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_* constants have been removed in 
+favor of BITCOINCONSENSUS_VERIFY_*. 
 
-At build time, it will check if newer (opt-in) flags are exported (such as NULLDUMMY)
-by the bitcoinconsensus.h. If so, the flags for these will be compiled in. 
-
-This means that the constants in the library depend on the version
-of the library it was built against. 
+At build time, it will check if newer (opt-in) flags are exported (such as 
+NULLDUMMY) by the bitcoinconsensus.h. If so, the flags for these will be compiled
+in. 
 
 ## To Install:
 ```
