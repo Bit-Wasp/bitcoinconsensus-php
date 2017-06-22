@@ -9,14 +9,15 @@ php:
     - 7.1
 
 env:
-  - BITCOIN_VERSION=0.13.2
-  - BITCOIN_VERSION=0.14.0
-  - BITCOIN_VERSION=0.14.2
+  - BITCOIN_VERSION=0.12.1 BITCOIN_PKG=bitcoin-0.12.1-linux64.tar.gz
+  - BITCOIN_VERSION=0.13.2 BITCOIN_PKG=bitcoin-0.13.2-x86_64-linux-gnu.tar.gz
+  - BITCOIN_VERSION=0.14.0 BITCOIN_PKG=bitcoin-0.14.0-x86_64-linux-gnu.tar.gz
+  - BITCOIN_VERSION=0.14.2 BITCOIN_PKG=bitcoin-0.14.2-x86_64-linux-gnu.tar.gz
 
 install:
     - |
-        wget https://bitcoin.org/bin/bitcoin-core-${BITCOIN_VERSION}/bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz \
-        && tar xvf bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz \
+        wget https://bitcoin.org/bin/bitcoin-core-${BITCOIN_VERSION}/${BITCOIN_PKG} \
+        && tar xvf ${BITCOIN_PKG} \
         && cd bitcoin-${BITCOIN_VERSION} \
         && sudo cp include/bitcoinconsensus.h /usr/include/ \
         && sudo cp lib/libbitcoinconsensus.so.0.0.0 /usr/lib/ \

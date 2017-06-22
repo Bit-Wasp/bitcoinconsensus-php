@@ -16,6 +16,7 @@ ZEND_BEGIN_ARG_INFO(arginfo_bitcoinconsensus_verify_script, 0)
     ZEND_ARG_INFO(1, errorFlag)
 ZEND_END_ARG_INFO();
 
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
 ZEND_BEGIN_ARG_INFO(arginfo_bitcoinconsensus_verify_script_with_amount, 0)
     ZEND_ARG_INFO(0, scriptPubKey)
     ZEND_ARG_INFO(0, amount)
@@ -24,6 +25,7 @@ ZEND_BEGIN_ARG_INFO(arginfo_bitcoinconsensus_verify_script_with_amount, 0)
     ZEND_ARG_INFO(0, flags)
     ZEND_ARG_INFO(1, errorFlag)
 ZEND_END_ARG_INFO();
+#endif
 
 
 /* {{{ proto int bitcoinconsensus_version);
@@ -56,6 +58,7 @@ PHP_FUNCTION(bitcoinconsensus_verify_script)
 }
 /* }}} */
 
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
 /* {{{ proto int bitcoinconsensus_verify_script(string scriptPubKey, string transaction, int nInput, int flags, int error);
  * Return true or false for a given scriptPubKey / transaction / nInput */
 PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount)
@@ -77,22 +80,25 @@ PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount)
     RETURN_LONG(result);
 }
 /* }}} */
+#endif
 
 PHP_MINIT_FUNCTION(bitcoinconsensus)
 {
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NONE", 0, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_P2SH", (1U << 0), CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_DERSIG", (1U << 2), CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY", (1U << 9), CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY", (1U << 10), CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_WITNESS", (1U << 11), CONST_CS | CONST_PERSISTENT);
-
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_NONE", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NONE, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_P2SH", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_P2SH, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_DERSIG", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_DERSIG, CONST_CS | CONST_PERSISTENT);
+
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY, CONST_CS | CONST_PERSISTENT);
+#endif
+
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY, CONST_CS | CONST_PERSISTENT);
+#endif
+
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_WITNESS", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS, CONST_CS | CONST_PERSISTENT);
+#endif
 
 #ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_NULLDUMMY", bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY, CONST_CS | CONST_PERSISTENT);
@@ -103,13 +109,21 @@ PHP_MINIT_FUNCTION(bitcoinconsensus)
 #ifndef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_ALL
     flags = bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NONE |
         bitcoinconsensus_SCRIPT_FLAGS_VERIFY_P2SH |
-        bitcoinconsensus_SCRIPT_FLAGS_VERIFY_DERSIG |
-        bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY |
-        bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY |
-        bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS;
+        bitcoinconsensus_SCRIPT_FLAGS_VERIFY_DERSIG;
+
+    #ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY
+    flags = flags | bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY
+    #endif
+    #ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY
+    flags = flags | bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY
+    #endif
+    #ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
+    flags = flags | bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
+    #endif
     #ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY
     flags = flags | bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY
     #endif
+
 #endif
 
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_VERIFY_ALL", flags, CONST_CS | CONST_PERSISTENT);
@@ -132,7 +146,9 @@ PHP_MINFO_FUNCTION(bitcoinconsensus)
 const zend_function_entry bitcoinconsensus_functions[] = {
     PHP_FE(bitcoinconsensus_version, NULL)
     PHP_FE(bitcoinconsensus_verify_script, arginfo_bitcoinconsensus_verify_script)
+#ifdef bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
     PHP_FE(bitcoinconsensus_verify_script_with_amount, arginfo_bitcoinconsensus_verify_script_with_amount)
+#endif
 	PHP_FE_END	/* Must be the last line in bitcoinconsensus_functions[] */
 };
 
