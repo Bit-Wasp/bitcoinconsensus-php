@@ -13,6 +13,8 @@ get a trusted copy.
 
 Version v2.0.0 can run on PHP versions 5.3 - 5.6, and PHP 7.0 - 7.1.
 
+It must be built against Bitcoin Core v0.13.0 upwards. 
+
 ## Supported features
 
     BITCOINCONSENSUS_VERIFY_NONE 
