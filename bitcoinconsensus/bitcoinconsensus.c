@@ -54,16 +54,17 @@ PHP_FUNCTION(bitcoinconsensus_version)
  * Return true or false for a given scriptPubKey / transaction / nInput */
 PHP_FUNCTION(bitcoinconsensus_verify_script)
 {
-    unsigned char *scriptPubKey, *transaction;
-    int scriptPubKeyLen, transactionLen;
+    zend_string *tx, *scriptPubKey;
     unsigned int nInput, flags;
+    int result = 0;
     zval *scriptErr;
     bitcoinconsensus_error error;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssllz", &scriptPubKey, &scriptPubKeyLen, &transaction, &transactionLen, &nInput, &flags, &scriptErr) == FAILURE) {
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SSllz", &scriptPubKey, &tx, &nInput, &flags, &scriptErr) == FAILURE) {
         return;
     }
 
-    int result = bitcoinconsensus_verify_script(scriptPubKey, scriptPubKeyLen, transaction, transactionLen, nInput, flags, &error);
+    result = bitcoinconsensus_verify_script(scriptPubKey->val, scriptPubKey->len, tx->val, tx->len, nInput, flags, &error);
     if (result != bitcoinconsensus_ERR_OK) {
         ZVAL_LONG(scriptErr, error);
     }
@@ -75,17 +76,18 @@ PHP_FUNCTION(bitcoinconsensus_verify_script)
  * Return true or false for a given scriptPubKey / transaction / nInput */
 PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount)
 {
-    unsigned char *scriptPubKey, *transaction;
-    int scriptPubKeyLen, transactionLen;
+    zend_string *scriptPubKey, *transaction;
     unsigned int nInput, flags;
     int64_t amount;
+    int result = 0;
     zval *scriptErr;
     bitcoinconsensus_error error;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slsllz", &scriptPubKey, &scriptPubKeyLen, &amount, &transaction, &transactionLen, &nInput, &flags, &scriptErr) == FAILURE) {
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SlSllz", &scriptPubKey, &amount, &transaction, &nInput, &flags, &scriptErr) == FAILURE) {
         return;
     }
 
-    int result = bitcoinconsensus_verify_script_with_amount(scriptPubKey, scriptPubKeyLen, amount, transaction, transactionLen, nInput, flags, &error);
+    result = bitcoinconsensus_verify_script_with_amount(scriptPubKey->val, scriptPubKey->len, amount, transaction->val, transaction->len, nInput, flags, &error);
     if (result != bitcoinconsensus_ERR_OK) {
         ZVAL_LONG(scriptErr, error);
     }
