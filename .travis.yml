@@ -10,7 +10,12 @@ env:
   - BITCOIN_VERSION=0.16.0
 
 matrix:
+  exclude:
+    - php: 7.2
+      env: BITCOIN_VERSION=0.16.0
   include:
+    - php: 7.2
+      env: BITCOIN_VERSION=0.16.0 COVERAGE=true
     - php: 7.2
       env: BITCOIN_VERSION=0.13.2
     - php: 7.2
@@ -34,6 +39,9 @@ install:
         cd bitcoinconsensus \
         && phpize && ./configure --with-bitcoinconsensus && make && sudo make install \
         && cd ..
+    - |
+        cp bitcoin-${BITCOIN_VERSION}/lib/libbitcoinconsensus.so.0.0.0 tools/phpqa/lib/ && \
+        cp bitcoin-${BITCOIN_VERSION}/include/bitcoinconsensus.h tools/phpqa/lib/
     - git clone https://github.com/jonasnick/bitcoinconsensus_testcases.git
     - composer update
 
@@ -43,4 +51,5 @@ before_script:
     - phpenv version-name
 
 script:
+    - tools/verify_stubs.sh || exit 1
     - php -dextension=bitcoinconsensus.so vendor/bin/phpunit --debug tests/

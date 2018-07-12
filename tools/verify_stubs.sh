@@ -1,9 +1,8 @@
 #!/bin/bash
-set -e
 cd $(git rev-parse --show-toplevel)
 
 if [ "${COVERAGE}" = "true" ]; then
-    travis/generate_stubs.sh
+    tools/generate_stubs.sh
 
     cmp --silent stubs/const.php tools/stubs/output/const.php
 
