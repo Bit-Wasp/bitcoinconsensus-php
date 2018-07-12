@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BitWasp\BitcoinConsensus\Tests;
 
 class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
@@ -66,12 +68,15 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         $vectors = json_decode(file_get_contents(__DIR__ . '/data.json') , true);
         $results = array();
         foreach ($vectors as $vector) {
+            if ($vector === null) break;
+
             if ($vector['flags'] == ($vector['flags']&BITCOINCONSENSUS_VERIFY_ALL)) {
                 $results[] = array(
                     $vector['scriptPubKey'], $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result'], $vector
                 );
             }
         }
+
         return $results;
     }
 
