@@ -72,7 +72,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
 
             if ($vector['flags'] == ($vector['flags']&BITCOINCONSENSUS_VERIFY_ALL)) {
                 $results[] = array(
-                    $vector['scriptPubKey'], $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result'], $vector
+                    $vector['scriptPubKey'], (int) $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result'], $vector
                 );
             }
         }

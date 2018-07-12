@@ -1,0 +1,11 @@
+{
+  "bitcoinconsensus_version": {
+    "doc": "Returns the bitcoinconsensus version.\n"
+  },
+  "bitcoinconsensus_verify_script": {
+    "doc": "Returns 1 if the input nIn of the serialized transaction pointed to by\ntxTo correctly spends the scriptPubKey pointed to by scriptPubKey under\nthe additional constraints specified by flags.\nIf not nullptr, err will contain an error/success code for the operation.\n"
+  },
+  "bitcoinconsensus_verify_script_with_amount": {
+    "doc": "Returns 1 if the input nIn of the serialized transaction pointed to by\ntxTo correctly spends the scriptPubKey pointed to by scriptPubKey under\nthe additional constraints specified by flags.\nIf not nullptr, err will contain an error/success code for the operation.\nThis function must be used when the input uses segregated witness."
+  }
+}
