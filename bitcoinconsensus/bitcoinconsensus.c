@@ -8,25 +8,40 @@
 #include "ext/standard/info.h"
 #include "php_bitcoinconsensus.h"
 
-ZEND_BEGIN_ARG_INFO(arginfo_bitcoinconsensus_verify_script, 0)
-    ZEND_ARG_INFO(0, scriptPubKey)
-    ZEND_ARG_INFO(0, transaction)
-    ZEND_ARG_INFO(0, nInput)
-    ZEND_ARG_INFO(0, flags)
-    ZEND_ARG_INFO(1, errorFlag)
+#if (PHP_VERSION_ID >= 70000 && PHP_VERSION_ID <= 70200)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_version, IS_LONG, NULL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_version, IS_LONG, 0)
+#endif
 ZEND_END_ARG_INFO();
 
-ZEND_BEGIN_ARG_INFO(arginfo_bitcoinconsensus_verify_script_with_amount, 0)
-    ZEND_ARG_INFO(0, scriptPubKey)
-    ZEND_ARG_INFO(0, amount)
-    ZEND_ARG_INFO(0, transaction)
-    ZEND_ARG_INFO(0, nInput)
-    ZEND_ARG_INFO(0, flags)
-    ZEND_ARG_INFO(1, errorFlag)
+#if (PHP_VERSION_ID >= 70000 && PHP_VERSION_ID <= 70200)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_verify_script, IS_LONG, NULL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_verify_script, IS_LONG, 0)
+#endif
+    ZEND_ARG_TYPE_INFO(0, scriptPubKey, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, transaction, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, nInput, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(1, errorFlag, IS_LONG, 1)
+ZEND_END_ARG_INFO();
+
+#if (PHP_VERSION_ID >= 70000 && PHP_VERSION_ID <= 70200)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_verify_script_with_amount, IS_LONG, NULL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_bitcoinconsensus_verify_script_with_amount, IS_LONG, 0)
+#endif
+    ZEND_ARG_TYPE_INFO(0, scriptPubKey, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, amount, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, transaction, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, nInput, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(1, errorFlag, IS_LONG, 1)
 ZEND_END_ARG_INFO();
 
 
-/* {{{ proto int bitcoinconsensus_version);
+/* {{{ proto int bitcoinconsensus_version();
  * Return the version of libbitcoinconsensus */
 PHP_FUNCTION(bitcoinconsensus_version)
 {
