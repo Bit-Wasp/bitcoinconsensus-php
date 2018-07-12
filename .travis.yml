@@ -53,3 +53,4 @@ before_script:
 script:
     - tools/verify_stubs.sh || exit 1
     - php -dextension=bitcoinconsensus.so vendor/bin/phpunit --debug tests/
+    - tools/run_coverage_test.sh || exit 1
