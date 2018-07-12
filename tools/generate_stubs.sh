@@ -22,5 +22,5 @@ else
     [ -d "${_STUBSOUT}" ] || mkdir output
 fi
 
-php -dextension=secp256k1.so php-extension-stub-generator/bin/docblock-stub-generator dump-files --docBlock=config.json bitcoinconsensus ${_STUBSOUT} <<< $'y'
+php -dextension=bitcoinconsensus.so php-extension-stub-generator/bin/docblock-stub-generator dump-files --docBlock=config.json bitcoinconsensus ${_STUBSOUT} <<< $'y'
 
