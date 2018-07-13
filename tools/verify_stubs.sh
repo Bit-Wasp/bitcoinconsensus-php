@@ -11,6 +11,7 @@ if [ "${COVERAGE}" = "true" ]; then
         echo "const file ok";
     else
         echo "const file not up to date";
+        diff stubs/const.php tools/stubs/output/const.php
         exit -1;
     fi
 
@@ -21,6 +22,7 @@ if [ "${COVERAGE}" = "true" ]; then
         echo "functions file ok";
     else
         echo "functions file not up to date";
+        diff stubs/functions.php tools/stubs/output/functions.php
         exit -1;
     fi
 fi

@@ -58,14 +58,14 @@ PHP_FUNCTION(bitcoinconsensus_verify_script)
     unsigned int nInput, flags;
     int result = 0;
     zval *scriptErr;
-    bitcoinconsensus_error error;
+    bitcoinconsensus_error error = bitcoinconsensus_ERR_OK;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SSllz", &scriptPubKey, &tx, &nInput, &flags, &scriptErr) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SSllz/", &scriptPubKey, &tx, &nInput, &flags, &scriptErr) == FAILURE) {
         return;
     }
 
     result = bitcoinconsensus_verify_script(scriptPubKey->val, scriptPubKey->len, tx->val, tx->len, nInput, flags, &error);
-    if (result != bitcoinconsensus_ERR_OK) {
+    if (error != bitcoinconsensus_ERR_OK) {
         ZVAL_LONG(scriptErr, error);
     }
     RETURN_LONG(result);
@@ -79,16 +79,16 @@ PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount)
     zend_string *scriptPubKey, *transaction;
     unsigned int nInput, flags;
     int64_t amount;
-    int result = 0;
+    int result = bitcoinconsensus_ERR_OK;
     zval *scriptErr;
-    bitcoinconsensus_error error;
+    bitcoinconsensus_error error = bitcoinconsensus_ERR_OK;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SlSllz", &scriptPubKey, &amount, &transaction, &nInput, &flags, &scriptErr) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "SlSllz/", &scriptPubKey, &amount, &transaction, &nInput, &flags, &scriptErr) == FAILURE) {
         return;
     }
 
     result = bitcoinconsensus_verify_script_with_amount(scriptPubKey->val, scriptPubKey->len, amount, transaction->val, transaction->len, nInput, flags, &error);
-    if (result != bitcoinconsensus_ERR_OK) {
+    if (error != bitcoinconsensus_ERR_OK) {
         ZVAL_LONG(scriptErr, error);
     }
     RETURN_LONG(result);
@@ -97,6 +97,15 @@ PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount)
 
 PHP_MINIT_FUNCTION(bitcoinconsensus)
 {
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_OK", bitcoinconsensus_ERR_OK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_TX_INDEX", bitcoinconsensus_ERR_TX_INDEX, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_TX_SIZE_MISMATCH", bitcoinconsensus_ERR_TX_SIZE_MISMATCH, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_TX_DESERIALIZE", bitcoinconsensus_ERR_TX_DESERIALIZE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_AMOUNT_REQUIRED", bitcoinconsensus_ERR_AMOUNT_REQUIRED, CONST_CS | CONST_PERSISTENT);
+#ifdef bitcoinconsensus_ERR_INVALID_FLAGS
+    REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_ERR_INVALID_FLAGS", bitcoinconsensus_ERR_INVALID_FLAGS, CONST_CS | CONST_PERSISTENT);
+#endif
+
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NONE", 0, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_P2SH", (1U << 0), CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_DERSIG", (1U << 2), CONST_CS | CONST_PERSISTENT);

@@ -83,7 +83,10 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
     public function getScriptFixtures()
     {
         $vectors = array();
-        foreach (array('getSignerScriptTests', 'getBitcoinScriptTests') as $fxn) {
+        foreach (array(
+            'getSignerScriptTests',
+            'getBitcoinScriptTests'
+        ) as $fxn) {
             $vectors = array_merge($vectors, $this->{$fxn}());
         }
         return $vectors;
