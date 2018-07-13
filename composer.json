@@ -1,4 +1,9 @@
 {
+    "name": "bitwasp/bitcoinconsensus",
+    "description": "Composer package containing stubs for bitcoinconsensus. Make sure your version is correct!",
+    "type": "library",
+    "keywords": ["bitcoin", "script", "bitcoinconsensus", "transaction"],
+    "homepage": "https://github.com/Bit-Wasp/bitcoinconsensus-php",
     "autoload-dev": {
         "\\BitWasp\\BitcoinConsensus\\Tests\\": "tests/"
     },
