@@ -1,5 +1,8 @@
 # bitcoinconsensus-php
 
+[![Build Status](https://travis-ci.org/Bit-Wasp/bitcoinconsensus-php.svg?branch=master)](https://travis-ci.org/Bit-Wasp/bitcoinconsensus-php)
+[![codecov](https://codecov.io/gh/Bit-Wasp/bitcoinconsensus-php/branch/master/graph/badge.svg)](https://codecov.io/gh/Bit-Wasp/bitcoinconsensus-php)
+
 PHP extension for Bitcoin Script validation.
 
 It exposes bindings to the bitcoinconsensus.h library, which exposes the VerifyScript
