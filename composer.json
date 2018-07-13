@@ -5,6 +5,9 @@
     "license": "Unlicense",
     "keywords": ["bitcoin", "script", "bitcoinconsensus", "transaction"],
     "homepage": "https://github.com/Bit-Wasp/bitcoinconsensus-php",
+    "require": {
+        "php": ">=7.0"
+    },
     "autoload-dev": {
         "\\BitWasp\\BitcoinConsensus\\Tests\\": "tests/"
     },
