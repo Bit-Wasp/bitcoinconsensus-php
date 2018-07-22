@@ -1,0 +1,14 @@
+--TEST--
+bitcoinconsensus script flag BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY
+--SKIPIF--
+<?php 
+if (!extension_loaded("bitcoinconsensus")) print "skip extension not loaded";
+if (!defined("BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY")) print "skip BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY not defined";
+?>
+--FILE--
+<?php
+echo BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY . PHP_EOL;
+?>
+--EXPECTF--
+1024
+

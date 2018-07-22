@@ -1,5 +1,3 @@
-#include <bitcoinconsensus.h>
-
 #ifndef PHP_BITCOINCONSENSUS_H
 #define PHP_BITCOINCONSENSUS_H
 
@@ -22,7 +20,9 @@ extern zend_module_entry bitcoinconsensus_module_entry;
 
 PHP_FUNCTION(bitcoinconsensus_version);
 PHP_FUNCTION(bitcoinconsensus_verify_script);
+#if HAVE_DECL_BITCOINCONSENSUS_VERIFY_SCRIPT_WITH_AMOUNT == 1
 PHP_FUNCTION(bitcoinconsensus_verify_script_with_amount);
+#endif
 
 #ifdef ZTS
 #define BITCOINCONSENSUS_G(v) TSRMG(bitcoinconsensus_globals_id, zend_bitcoinconsensus_globals *, v)

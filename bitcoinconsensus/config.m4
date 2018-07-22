@@ -1,8 +1,6 @@
 dnl $Id$
 dnl config.m4 for extension bitcoinconsensus
 
-dnl If your extension references something external, use with:
-
 PHP_ARG_WITH(bitcoinconsensus, for bitcoinconsensus support,
 Make sure that the comment is aligned:
 [  --with-bitcoinconsensus             Include bitcoinconsensus support])
@@ -46,7 +44,18 @@ if test "$PHP_BITCOINCONSENSUS" != "no"; then
   ],[
     -L$BITCOINCONSENSUS_DIR/$PHP_LIBDIR -lm
   ])
-  
+
+  AC_CHECK_DECLS([bitcoinconsensus_verify_script_with_amount], [], [], [[#include <bitcoinconsensus.h>]])
+
+  AC_CHECK_DECLS([bitcoinconsensus_ERR_AMOUNT_REQUIRED], [], [], [[#include <bitcoinconsensus.h>]])
+  AC_CHECK_DECLS([bitcoinconsensus_ERR_INVALID_FLAGS], [], [], [[#include <bitcoinconsensus.h>]])
+
+  AC_CHECK_DECLS([bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY], [], [], [[#include <bitcoinconsensus.h>]])
+  AC_CHECK_DECLS([bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY], [], [], [[#include <bitcoinconsensus.h>]])
+  AC_CHECK_DECLS([bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY], [], [], [[#include <bitcoinconsensus.h>]])
+  AC_CHECK_DECLS([bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS], [], [], [[#include <bitcoinconsensus.h>]])
+  AC_CHECK_DECLS([bitcoinconsensus_SCRIPT_FLAGS_VERIFY_ALL], [], [], [[#include <bitcoinconsensus.h>]])
+
   PHP_SUBST(BITCOINCONSENSUS_SHARED_LIBADD)
 
   PHP_NEW_EXTENSION(bitcoinconsensus, bitcoinconsensus.c, $ext_shared)
