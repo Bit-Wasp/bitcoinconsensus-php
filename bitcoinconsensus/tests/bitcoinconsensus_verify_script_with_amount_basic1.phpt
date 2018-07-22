@@ -3,6 +3,7 @@ bitcoinconsensus_verify_script_with_amount returns true with no error
 --SKIPIF--
 <?php
 if (!extension_loaded("bitcoinconsensus")) print "skip extension not loaded";
+if (!function_exists("bitcoinconsensus_verify_script_with_amount")) print "skip bitcoinconsensus_verify_script_with_amount not defined";
 ?>
 --FILE--
 <?php
