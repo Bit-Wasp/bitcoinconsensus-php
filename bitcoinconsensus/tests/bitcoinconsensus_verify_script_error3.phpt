@@ -9,7 +9,7 @@ if (!extension_loaded("bitcoinconsensus")) print "skip extension not loaded";
 $scriptPubKey = hex2bin("00140102030401020304010203040102030401020304");
 $tx = hex2bin("010000000100000000000000000000000000000000000000000000000000000000000000000000000000ffffffff010065cd1d0000000017a91400000000000000000000000000000000000000008700000000");
 $nIn = 0;
-$flags = BITCOINCONSENSUS_VERIFY_ALL;
+$flags = BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL;
 $error = 0;
 
 $result = bitcoinconsensus_verify_script($scriptPubKey, $tx, $nIn, $flags, $error);

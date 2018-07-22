@@ -14,39 +14,46 @@ get a trusted copy.
 
 ## Requirements
 
-Version v2.0.0 can run on PHP versions 5.3 - 5.6, and PHP 7.0 - 7.1.
+Version v3.0.0 can be run on PHP versions > 7.0.
+ - In theory can be built with versions before Bitcoin Core v0.13.0.
 
-It must be built against Bitcoin Core v0.13.0 upwards. 
+Version v2.0.0 can run on PHP versions 5.3 - 5.6, and PHP 7.0 - 7.2, 7.3-RC
+ - It must be built against Bitcoin Core v0.13.0 upwards.
+
+See how to install a certain branch in the installation section.
 
 ## Supported features
 
-    BITCOINCONSENSUS_VERIFY_NONE 
-    BITCOINCONSENSUS_VERIFY_P2SH
-    BITCOINCONSENSUS_VERIFY_DERSIG
-    BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY
-    BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY
-    BITCOINCONSENSUS_VERIFY_WITNESS
+
+Script verification flags:
+
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NONE
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_P2SH
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_DERSIG
     
     Optional (depends on bitcoinconsensus.h build):
-    BITCOINCONSENSUS_VERIFY_NULLDUMMY
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_WITNESS
+    BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY
+
+Error codes for bitcoinconsensus_verify_script{,with_amount}
+
+    BITCOINCONSENSUS_ERR_OK                   no error
+    BITCOINCONSENSUS_ERR_TX_INDEX             input index not set in transaction
+    BITCOINCONSENSUS_ERR_TX_SIZE_MISMATCH     (not possible)
+    BITCOINCONSENSUS_ERR_TX_DESERIALIZE       invalid transaction serialization
+    BITCOINCONSENSUS_ERR_AMOUNT_REQUIRED      used segwit flag with old function
+    BITCOINCONSENSUS_ERR_INVALID_FLAGS        invalid script verification flags used
 
 ## Compatibility
 
-v2.0.0 brings the library in line with the expectations upstream. It only
-exposes a minimal set of network activated script validation flags in 
-[bitcoinconsensus.h](https://github.com/bitcoin/bitcoin/blob/master/src/script/bitcoinconsensus.h).
-
-The BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_* constants have been removed in 
-favor of BITCOINCONSENSUS_VERIFY_*. 
-
-At build time, it will check if newer (opt-in) flags are exported (such as 
-NULLDUMMY) by the bitcoinconsensus.h. If so, the flags for these will be compiled
-in. 
+Script verification constants following the naming `BITCOINCONSENSUS_VERIFY_x`
+were removed in favor of those following upstreams naming.
 
 ## To Install:
 ```
-    git clone git@github.com:bitwasp/bitcoinconsensus-php
-    cd bitcoinconsensus-php
+    git clone -b v3.0.0 git@github.com:bit-wasp/bitcoinconsensus-php
     cd bitcoinconsensus-php/bitcoinconsensus
     phpize && ./configure --with-bitcoinconsensus && make && sudo make install
 ```
