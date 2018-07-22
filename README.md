@@ -43,6 +43,8 @@ Error codes for bitcoinconsensus_verify_script{,with_amount}
     BITCOINCONSENSUS_ERR_TX_INDEX             input index not set in transaction
     BITCOINCONSENSUS_ERR_TX_SIZE_MISMATCH     (not possible)
     BITCOINCONSENSUS_ERR_TX_DESERIALIZE       invalid transaction serialization
+
+    Optional (depends on bitcoinconsensus.h build):
     BITCOINCONSENSUS_ERR_AMOUNT_REQUIRED      used segwit flag with old function
     BITCOINCONSENSUS_ERR_INVALID_FLAGS        invalid script verification flags used
 
