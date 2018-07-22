@@ -10,31 +10,31 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
     {
         $nullDummyBit = 1 << 4;
         $expectFindInALL = false;
-        if (defined('BITCOINCONSENSUS_VERIFY_NULLDUMMY')) {
+        if (defined('BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY')) {
             $expectFindInALL = true;
 
-            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_NULLDUMMY);
-            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_VERIFY_ALL & (BITCOINCONSENSUS_VERIFY_NULLDUMMY));
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY);
+            $this->assertEquals($nullDummyBit, BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL & (BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY));
         }
 
-        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_VERIFY_ALL & ($nullDummyBit)) != 0);
+        $this->assertEquals($expectFindInALL, (BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL & ($nullDummyBit)) != 0);
     }
 
     public function testFlagsAll()
     {
         $expectFlags =
-            BITCOINCONSENSUS_VERIFY_NONE |
-            BITCOINCONSENSUS_VERIFY_P2SH |
-            BITCOINCONSENSUS_VERIFY_DERSIG |
-            BITCOINCONSENSUS_VERIFY_CHECKLOCKTIMEVERIFY |
-            BITCOINCONSENSUS_VERIFY_CHECKSEQUENCEVERIFY |
-            BITCOINCONSENSUS_VERIFY_WITNESS;
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NONE |
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_P2SH |
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_DERSIG |
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY |
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY |
+            BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_WITNESS;
 
-        if (defined('BITCOINCONSENSUS_VERIFY_NULLDUMMY')) {
-            $expectFlags = $expectFlags | BITCOINCONSENSUS_VERIFY_NULLDUMMY;
+        if (defined('BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY')) {
+            $expectFlags = $expectFlags | BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_NULLDUMMY;
         }
 
-        $this->assertEquals($expectFlags, BITCOINCONSENSUS_VERIFY_ALL);
+        $this->assertEquals($expectFlags, BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL);
     }
 
     public function testVersion()
@@ -55,7 +55,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
 
             foreach ($vector['raw']['ins'] as $nIn => $input) {
                 $results[] = array(
-                    $input['scriptPubKey'], $input['value'], $tx, $nIn, BITCOINCONSENSUS_VERIFY_ALL, true, $vector
+                    $input['scriptPubKey'], $input['value'], $tx, $nIn, BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL, true, $vector
                 );
             }
         }
@@ -70,7 +70,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         foreach ($vectors as $vector) {
             if ($vector === null) break;
 
-            if ($vector['flags'] == ($vector['flags']&BITCOINCONSENSUS_VERIFY_ALL)) {
+            if ($vector['flags'] == ($vector['flags']&BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_ALL)) {
                 $results[] = array(
                     $vector['scriptPubKey'], (int) $vector['amount'], $vector['tx'], $vector['nIn'], $vector['flags'], $vector['result'], $vector
                 );
@@ -106,8 +106,7 @@ class BitcoinConsensusTest extends \PHPUnit_Framework_TestCase
         $tx = pack("H*", $txHex);
 
         $error = 0;
-
-        if ($flags & (BITCOINCONSENSUS_VERIFY_P2SH | BITCOINCONSENSUS_VERIFY_WITNESS)) {
+        if ($flags & (BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_P2SH | BITCOINCONSENSUS_SCRIPT_FLAGS_VERIFY_WITNESS)) {
             $result = (bool)\bitcoinconsensus_verify_script_with_amount($script, $amount, $tx, $nInput, $flags, $error);
         } else {
             $result = (bool) \bitcoinconsensus_verify_script($script, $tx, $nInput, $flags, $error);
