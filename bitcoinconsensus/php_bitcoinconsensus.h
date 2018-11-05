@@ -4,7 +4,7 @@
 extern zend_module_entry bitcoinconsensus_module_entry;
 #define phpext_bitcoinconsensus_ptr &bitcoinconsensus_module_entry
 
-#define PHP_BITCOINCONSENSUS_VERSION "0.1.0" /* Replace with version number for your extension */
+#define PHP_BITCOINCONSENSUS_VERSION "0.3.0" /* Replace with version number for your extension */
 
 #ifdef PHP_WIN32
 #	define PHP_BITCOINCONSENSUS_API __declspec(dllexport)
