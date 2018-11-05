@@ -140,7 +140,7 @@ RUN cd /usr/src/php/scripts/dev \
     && php -d phar.readonly=0 generate-phpt/gtPackage.php \
     && cd /
 
-RUN wget https://bitcoincore.org/bin/bitcoin-core-0.16.1/bitcoin-0.16.1-x86_64-linux-gnu.tar.gz
+RUN wget https://bitcoincore.org/bin/bitcoin-core-0.16.3/bitcoin-0.16.3-x86_64-linux-gnu.tar.gz
 
 RUN tar xvf bitcoin*.tar.gz && \
     cd bitcoin* && \
